@@ -1,0 +1,22 @@
+{
+  "name": "common",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "postinstall": "npm run build",
+    "build": "rimraf dist && tsc",
+    "watch": "tsc --watch"
+  },
+  "dependencies": {
+    "react": "18.1.0",
+    "react-native": "0.70.5"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.6",
+    "@types/react-native": "^0.72.1",
+    "rimraf": "^5.0.1",
+    "typescript": "^5.0.4"
+  }
+}

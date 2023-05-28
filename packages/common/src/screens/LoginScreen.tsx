@@ -15,9 +15,20 @@ const LoginForm: React.FC = () => {
   };
 
   const handleSubmit = () => {
-    // Giriş işlemlerini burada gerçekleştirin
-    console.log("Email:", email);
-    console.log("Password:", password);
+    const data = {
+      email: email,
+      password: password,
+    };
+    fetch("http://localhost:8080/login/username", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((data) => console.log("data", data))
+      .catch((error) => console.log("error", error));
   };
 
   return (

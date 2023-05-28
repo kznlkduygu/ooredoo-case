@@ -39,9 +39,20 @@ var LoginForm = function () {
         setPassword(text);
     };
     var handleSubmit = function () {
-        // Giriş işlemlerini burada gerçekleştirin
-        console.log("Email:", email);
-        console.log("Password:", password);
+        var data = {
+            email: email,
+            password: password,
+        };
+        fetch("http://localhost:8080/login/username", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        })
+            .then(function (response) { return response.json(); })
+            .then(function (data) { return console.log("data", data); })
+            .catch(function (error) { return console.log("error", error); });
     };
     return (react_1.default.createElement(react_native_1.View, { style: styles.container },
         react_1.default.createElement(react_native_1.View, { style: { paddingBottom: 16 } },

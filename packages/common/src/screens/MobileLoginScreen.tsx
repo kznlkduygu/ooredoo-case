@@ -20,30 +20,38 @@ const MobileLoginScreen = (props: Props) => {
   const handleMobileChange = (text: string) => {
     setMobileNumber(text);
   };
-  const handleSubmit = () => {
-    const data = {
-      serviceNumber: mobileNumber,
-    };
-    fetch("http://localhost:8080/login/serviceNumber", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        Platform.OS === "web"
-          ? (window.location.href = "verification")
-          : navigation.navigate("Verification");
-        return data; // Promise'in sonucunu data ile döndür
-      })
-      .catch((error) => {
-        console.log("error", error);
-        throw error; // Hatanın yakalanması için Promise'i reddet
-      });
-  };
   
+  const handleSubmit = async () => {
+    if (mobileNumber) {
+      try {
+        const formData = {
+          serviceNumber: mobileNumber,
+        };
+
+        const response = await fetch("http://localhost:8080/login/serviceNumber", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        });
+
+        if (!response.ok) {
+          throw new Error("API request failed");
+        }
+        const url = `/verification?mobileNumber=${mobileNumber}`;
+        if (Platform.OS === "web") {
+          window.location.href = url;
+        } else {
+          navigation.navigate("Verification", { mobileNumber });
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+      }
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={{ flex: 1 }}>

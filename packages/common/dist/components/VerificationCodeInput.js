@@ -35,7 +35,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = __importStar(require("react"));
 var react_native_1 = require("react-native");
 var VerificationCodeInput = function (props) {
-    var _a = (0, react_1.useState)(["", "", "", ""]), code = _a[0], setCode = _a[1];
+    var code = props.code, setCode = props.setCode;
     var inputRefs = (0, react_1.useRef)([]);
     var handleCodeChange = function (index, value) {
         var newCode = __spreadArray([], code, true);

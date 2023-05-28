@@ -1,10 +1,13 @@
 import React, { useState, useRef } from "react";
 import { View, TextInput, StyleSheet } from "react-native";
 
-interface Props {}
+interface Props {
+  setCode?: any;
+  code?: any;
+}
 
 const VerificationCodeInput = (props: Props) => {
-  const [code, setCode] = useState<string[]>(["", "", "", ""]);
+  const { code, setCode } = props;
   const inputRefs = useRef<TextInput[]>([]);
 
   const handleCodeChange = (index: number, value: string) => {
@@ -25,7 +28,7 @@ const VerificationCodeInput = (props: Props) => {
 
   return (
     <View style={styles.container}>
-      {code.map((digit, index) => (
+      {code.map((digit: any, index: number) => (
         <TextInput
           key={index}
           style={styles.input}

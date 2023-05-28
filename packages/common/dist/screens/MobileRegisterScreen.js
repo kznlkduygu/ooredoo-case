@@ -28,18 +28,32 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = __importStar(require("react"));
 var react_native_1 = require("react-native");
-var colors_1 = require("../constans/colors");
 var Button_1 = __importDefault(require("../components/Button"));
+var validateQID_1 = require("../utils/validateQID");
+var colors_1 = require("../constans/colors");
 var MobileRegisterScreen = function (props) {
     var navigation = props.navigation;
-    var _a = (0, react_1.useState)(""), mobileNumber = _a[0], setmobileNumber = _a[1];
+    var _a = (0, react_1.useState)(""), mobileNumber = _a[0], setMobileNumber = _a[1];
     var _b = (0, react_1.useState)(""), qatarID = _b[0], setQatarID = _b[1];
+    var _c = (0, react_1.useState)(""), errorQID = _c[0], setErrorQID = _c[1];
+    (0, react_1.useEffect)(function () {
+        if (qatarID && !(0, validateQID_1.validateQID)(qatarID)) {
+            setErrorQID("Invalid Qatar ID");
+        }
+        else {
+            setErrorQID("");
+        }
+    }, [qatarID]);
     var handleSubmit = function () {
+        if (!(0, validateQID_1.validateQID)(qatarID)) {
+            setErrorQID("Invalid Qatar ID");
+            return;
+        }
         var data = {
             serviceNumber: mobileNumber,
             qid: qatarID,
         };
-        fetch("http://localhost:8080/validateServiceNumberForRegistration    ", {
+        fetch("http://localhost:8080/validateServiceNumberForRegistration", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -48,10 +62,15 @@ var MobileRegisterScreen = function (props) {
         })
             .then(function (response) { return response.json(); })
             .then(function (data) {
-            react_native_1.Platform.OS === "web"
-                ? (window.location.href = "verification")
-                : navigation.navigate("Verification");
-            console.log("data", data);
+            if (data) {
+                console.log("data", data);
+            }
+            else {
+                react_native_1.Platform.OS === "web"
+                    ? (window.location.href = "verification")
+                    : navigation.navigate("Verification");
+                console.log("data", data);
+            }
         })
             .catch(function (error) { return console.log("error", error); });
     };
@@ -60,9 +79,10 @@ var MobileRegisterScreen = function (props) {
             react_1.default.createElement(react_native_1.Text, { style: styles.title }, "Welcome to Ooredoo \uD83D\uDC4B"),
             react_1.default.createElement(react_native_1.Text, { style: styles.subtitle }, "Please fill in your information below. Your mobile number should start with either 3, 5, 6, or 7."),
             react_1.default.createElement(react_native_1.View, { style: styles.inputContainer },
-                react_1.default.createElement(react_native_1.TextInput, { onChangeText: function (text) { return setmobileNumber(text); }, style: styles.input, placeholder: "Mobile Number" })),
+                react_1.default.createElement(react_native_1.TextInput, { onChangeText: function (text) { return setMobileNumber(text); }, style: styles.input, placeholder: "Mobile Number" })),
             react_1.default.createElement(react_native_1.View, { style: styles.inputContainer },
-                react_1.default.createElement(react_native_1.TextInput, { onChangeText: function (text) { return setQatarID(text); }, style: styles.input, placeholder: "Qatar ID or Passport ID" }))),
+                react_1.default.createElement(react_native_1.TextInput, { onChangeText: function (text) { return setQatarID(text); }, style: styles.input, placeholder: "Qatar ID or Passport ID" }),
+                errorQID ? react_1.default.createElement(react_native_1.Text, { style: styles.error }, errorQID) : null)),
         react_1.default.createElement(react_native_1.View, { style: styles.buttonContainer },
             react_1.default.createElement(Button_1.default, { title: "Continue", onPress: handleSubmit }))));
 };
@@ -96,5 +116,9 @@ var styles = react_native_1.StyleSheet.create({
     },
     buttonContainer: {
         alignItems: "center",
+    },
+    error: {
+        color: "red",
+        marginTop: 5,
     },
 });

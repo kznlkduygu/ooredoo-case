@@ -83,36 +83,6 @@ var MobileLoginScreen = function (props) {
     var handleMobileChange = function (text) {
         setMobileNumber(text);
     };
-    // const handleSubmit = () => {
-    //   const data = {
-    //     serviceNumber: mobileNumber,
-    //   };
-    //   fetch("http://localhost:8080/login/serviceNumber", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify(data),
-    //   })
-    //     .then((response) => response.json())
-    //     .then((responseData) => {
-    //       const { mobileNumber } = responseData; // responseData'dan mobileNumber değerini al
-    //       if (Platform.OS === "web") {
-    //         window.location.href = `verification?mobileNumber=${mobileNumber}`; // mobileNumber'ı parametre olarak ekleyerek yönlendir
-    //       } else {
-    //         navigation.navigate("Verification", { mobileNumber }); // mobileNumber'ı props olarak geçirerek yönlendir
-    //       }
-    //     })
-    //     .catch((error) => {
-    //       console.log("error-->", error);
-    //       if (Platform.OS === "web") {
-    //         window.location.href = "verification";
-    //       } else {
-    //         navigation.navigate("Verification");
-    //       }
-    //       throw error;
-    //     });
-    // };
     var handleSubmit = function () { return __awaiter(void 0, void 0, void 0, function () {
         var formData, response, url, error_1;
         return __generator(this, function (_a) {

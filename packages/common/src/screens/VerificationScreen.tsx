@@ -81,6 +81,7 @@ const styles = StyleSheet.create({
     fontFamily: "Rubik",
   },
   buttonContainer: {
+    paddingTop: 16,
     alignItems: "center",
   },
   container: {

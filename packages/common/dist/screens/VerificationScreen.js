@@ -72,7 +72,6 @@ var VerificationScreen = function (props) {
     var _a = (0, react_1.useState)(["", "", "", ""]), code = _a[0], setCode = _a[1];
     console.log("route", route === null || route === void 0 ? void 0 : route.params);
     console.log("code", code);
-    // useEffect(() => {
     var handleSubmit = function () { return __awaiter(void 0, void 0, void 0, function () {
         var formData, response, url, error_1;
         return __generator(this, function (_a) {
@@ -116,8 +115,6 @@ var VerificationScreen = function (props) {
             }
         });
     }); };
-    // handleSubmit();
-    // }, []);
     return (react_1.default.createElement(react_native_1.View, { style: styles.container },
         react_1.default.createElement(react_native_1.Text, { style: styles.title }, "Enter the 4 - digit code"),
         react_1.default.createElement(react_native_1.Text, { style: styles.subtitle }, "Let\u2019s confirm your identity. Enter the verification code sent to your mobile number ****921."),
@@ -141,6 +138,7 @@ var styles = react_native_1.StyleSheet.create({
         fontFamily: "Rubik",
     },
     buttonContainer: {
+        paddingTop: 16,
         alignItems: "center",
     },
     container: {

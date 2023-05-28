@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TextInput, StyleSheet, Platform } from "react-native";
-import { Colors } from "../constans/colors";
 import Button from "../components/Button";
+import { validateQID } from "../utils/validateQID";
+import { Colors } from "../constans/colors";
 
 interface Props {
   navigation?: any;
@@ -9,15 +10,30 @@ interface Props {
 
 const MobileRegisterScreen = (props: Props) => {
   const { navigation } = props;
-  const [mobileNumber, setmobileNumber] = useState("");
+  const [mobileNumber, setMobileNumber] = useState("");
   const [qatarID, setQatarID] = useState("");
+  const [errorQID, setErrorQID] = useState("");
+
+  useEffect(() => {
+    if (qatarID && !validateQID(qatarID)) {
+      setErrorQID("Invalid Qatar ID");
+    } else {
+      setErrorQID("");
+    }
+  }, [qatarID]);
 
   const handleSubmit = () => {
+    if (!validateQID(qatarID)) {
+      setErrorQID("Invalid Qatar ID");
+      return;
+    }
+
     const data = {
       serviceNumber: mobileNumber,
       qid: qatarID,
     };
-    fetch("http://localhost:8080/validateServiceNumberForRegistration    ", {
+
+    fetch("http://localhost:8080/validateServiceNumberForRegistration", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -26,13 +42,18 @@ const MobileRegisterScreen = (props: Props) => {
     })
       .then((response) => response.json())
       .then((data) => {
-        Platform.OS === "web"
-          ? (window.location.href = "verification")
-          : navigation.navigate("Verification");
-        console.log("data", data);
+        if (data) {
+          console.log("data", data);
+        } else {
+          Platform.OS === "web"
+            ? (window.location.href = "verification")
+            : navigation.navigate("Verification");
+          console.log("data", data);
+        }
       })
       .catch((error) => console.log("error", error));
   };
+
   return (
     <View style={styles.container}>
       <View style={{ flex: 1 }}>
@@ -43,7 +64,7 @@ const MobileRegisterScreen = (props: Props) => {
         </Text>
         <View style={styles.inputContainer}>
           <TextInput
-            onChangeText={(text) => setmobileNumber(text)}
+            onChangeText={(text) => setMobileNumber(text)}
             style={styles.input}
             placeholder="Mobile Number"
           />
@@ -54,20 +75,17 @@ const MobileRegisterScreen = (props: Props) => {
             style={styles.input}
             placeholder="Qatar ID or Passport ID"
           />
+          {errorQID ? <Text style={styles.error}>{errorQID}</Text> : null}
         </View>
       </View>
       <View style={styles.buttonContainer}>
-        <Button
-          title="Continue"
-          onPress={handleSubmit}
-        />
+        <Button title="Continue" onPress={handleSubmit} />
       </View>
     </View>
   );
 };
 
 export default MobileRegisterScreen;
-
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 8,
@@ -97,5 +115,9 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     alignItems: "center",
+  },
+  error: {
+    color: "red",
+    marginTop: 5,
   },
 });

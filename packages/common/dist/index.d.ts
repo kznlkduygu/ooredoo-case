@@ -1,3 +1,2 @@
-import React from 'react';
-declare const App: () => React.JSX.Element;
+declare const App: () => void;
 export default App;

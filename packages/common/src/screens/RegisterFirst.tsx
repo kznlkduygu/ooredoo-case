@@ -22,18 +22,18 @@ const RegisterFirst = (props: Props) => {
           Please select your registration type
         </Text>
       </View>
-      <TouchableOpacity style={styles.buttonContainer}>
+      <TouchableOpacity
+        onPress={() => {
+          Platform.OS === "web"
+            ? (window.location.href = "mobileregister")
+            : navigation.navigate("MobileRegister");
+        }}
+        style={styles.buttonContainer}
+      >
         <Text style={styles.buttonText}>Mobile Number</Text>
       </TouchableOpacity>
       <View style={styles.sectionContainer}>
-        <TouchableOpacity
-          onPress={() => {
-            Platform.OS === "web"
-              ? (window.location.href = "mobileregister")
-              : navigation.navigate("MobileRegister");
-          }}
-          style={styles.sectionButton}
-        >
+        <TouchableOpacity style={styles.sectionButton}>
           <Text style={styles.sectionButtonText}>Landline Number</Text>
         </TouchableOpacity>
         <TouchableOpacity

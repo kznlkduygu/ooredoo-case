@@ -10,9 +10,10 @@ import {
 import LoginScreen from "common/dist/screens/LoginScreen";
 import HomeScreen from "common/dist/screens/HomeScreen";
 import RegisterFirst from "common/dist/screens/RegisterFirst";
-import MobileLoginScreen from "common/dist/screens/MobileLoginScreen";
+import MobileRegisterScreen from "common/dist/screens/MobileRegisterScreen";
 import VerificationScreen from "common/dist/screens/VerificationScreen";
 import RegisterLastScreen from "common/dist/screens/RegisterLastScreen";
+import MobileLoginScreen from "common/dist/screens/MobileLoginScreen";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -29,8 +30,8 @@ const App = () => {
       element: <RegisterFirst />,
     },
     {
-      path: "/mobilelogin",
-      element: <MobileLoginScreen />,
+      path: "/mobileregister",
+      element: <MobileRegisterScreen />,
     },
     {
       path: "/verification",
@@ -39,6 +40,10 @@ const App = () => {
     {
       path: "/registerlast",
       element: <RegisterLastScreen />,
+    },
+    {
+      path: "/mobile-login",
+      element: <MobileLoginScreen />,
     },
   ]);
   return <RouterProvider router={router} />;

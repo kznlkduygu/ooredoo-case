@@ -1,8 +1,21 @@
 import React, { useState } from "react";
-import { View, TextInput, StyleSheet, Text } from "react-native";
+import {
+  View,
+  TextInput,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  Platform,
+} from "react-native";
 import Button from "../components/Button";
+import { Colors } from "../constans/colors";
 
-const LoginForm: React.FC = () => {
+interface Props {
+  navigation?: any;
+}
+
+const LoginScreen: React.FC = (props: Props) => {
+  const { navigation } = props;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -39,7 +52,26 @@ const LoginForm: React.FC = () => {
           Login with username and password. Can't remember or don't have a
           username?
         </Text>
-        <Text style={styles.subtitle}>Login with a mobile number and OTP</Text>
+        <View style={{ flexDirection: "row" }}>
+          <Text style={styles.subtitle}>Login with a</Text>
+          <TouchableOpacity
+            onPress={() => {
+              Platform.OS === "web"
+                ? (window.location.href = "mobile-login")
+                : navigation.navigate("MobileLogin");
+            }}
+          >
+            <Text
+              style={{
+                ...styles.subtitle,
+                paddingHorizontal: 0,
+                color: Colors.primaryRed,
+              }}
+            >
+              mobile number and OTP
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
       <TextInput
         style={styles.input}
@@ -87,4 +119,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginForm;
+export default LoginScreen;

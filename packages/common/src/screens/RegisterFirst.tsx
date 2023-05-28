@@ -29,8 +29,8 @@ const RegisterFirst = (props: Props) => {
         <TouchableOpacity
           onPress={() => {
             Platform.OS === "web"
-              ? (window.location.href = "mobilelogin")
-              : navigation.navigate("MobileLogin");
+              ? (window.location.href = "mobileregister")
+              : navigation.navigate("MobileRegister");
           }}
           style={styles.sectionButton}
         >
@@ -39,8 +39,8 @@ const RegisterFirst = (props: Props) => {
         <TouchableOpacity
           onPress={() => {
             Platform.OS === "web"
-              ? (window.location.href = "mobilelogin")
-              : navigation.navigate("MobileLogin");
+              ? (window.location.href = "mobileregister")
+              : navigation.navigate("MobileRegister");
           }}
           style={[styles.sectionButton, styles.sectionButtonMargin]}
         >

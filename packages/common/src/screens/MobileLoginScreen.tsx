@@ -1,5 +1,12 @@
-import React from "react";
-import { View, Text, TextInput, StyleSheet, Platform } from "react-native";
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Platform,
+  TouchableOpacity,
+} from "react-native";
 import { Colors } from "../constans/colors";
 import Button from "../components/Button";
 
@@ -9,30 +16,72 @@ interface Props {
 
 const MobileLoginScreen = (props: Props) => {
   const { navigation } = props;
+  const [mobileNumber, setMobileNumber] = useState("");
+  const handleMobileChange = (text: string) => {
+    setMobileNumber(text);
+  };
+  const handleSubmit = () => {
+    const data = {
+      serviceNumber: mobileNumber,
+    };
+    fetch("http://localhost:8080/login/serviceNumber", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        Platform.OS === "web"
+          ? (window.location.href = "verification")
+          : navigation.navigate("Verification");
+        return data; // Promise'in sonucunu data ile döndür
+      })
+      .catch((error) => {
+        console.log("error", error);
+        throw error; // Hatanın yakalanması için Promise'i reddet
+      });
+  };
+  
   return (
     <View style={styles.container}>
       <View style={{ flex: 1 }}>
-        <Text style={styles.title}>Welcome to Ooredoo 👋</Text>
+        <Text style={styles.title}>Login to My Ooredoo 👋</Text>
         <Text style={styles.subtitle}>
-          Please fill in your information below. Your mobile number should start
-          with either 3, 5, 6, or 7.
+          Login with mobile number. It should start with either 3, 5, 6 or 7. No
+          mobile number?
         </Text>
-        <View style={styles.inputContainer}>
-          <TextInput style={styles.input} placeholder="Mobile Number" />
+        <View style={{ flexDirection: "row" }}>
+          <Text style={styles.subtitle}>Login with a</Text>
+          <TouchableOpacity
+            onPress={() => {
+              Platform.OS === "web"
+                ? (window.location.href = "login")
+                : navigation.navigate("Login");
+            }}
+          >
+            <Text
+              style={{
+                ...styles.subtitle,
+                paddingHorizontal: 0,
+                color: Colors.primaryRed,
+              }}
+            >
+              username and password
+            </Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
-            placeholder="Qatar ID or Passport ID"
+            onChangeText={handleMobileChange}
+            placeholder="Mobile Number"
           />
         </View>
       </View>
       <View style={styles.buttonContainer}>
-        <Button title="Continue" onPress={() => {
-             Platform.OS === "web"
-             ? (window.location.href = "verification")
-             : navigation.navigate("Verification")
-        }} />
+        <Button title="Continue" onPress={handleSubmit} />
       </View>
     </View>
   );

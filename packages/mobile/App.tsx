@@ -5,9 +5,10 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import LoginScreen from 'common/dist/screens/LoginScreen';
 import HomeScreen from 'common/dist/screens/HomeScreen';
 import RegisterFirst from 'common/dist/screens/RegisterFirst';
-import MobileLoginScreen from 'common/dist/screens/MobileLoginScreen';
+import MobileRegisterScreen from 'common/dist/screens/MobileRegisterScreen';
 import VerificationScreen from 'common/dist/screens/VerificationScreen';
 import RegisterLastScreen from 'common/dist/screens/RegisterLastScreen';
+import MobileLoginScreen from 'common/dist/screens/MobileLoginScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,9 +24,9 @@ const RegisterFirstPage = () => {
   const navigation = useNavigation();
   return <RegisterFirst navigation={navigation} />;
 };
-const MobileLoginPage = () => {
+const MobileRegisterPage = () => {
   const navigation = useNavigation();
-  return <MobileLoginScreen navigation={navigation} />;
+  return <MobileRegisterScreen navigation={navigation} />;
 };
 const VerificationPage = () => {
   const navigation = useNavigation();
@@ -35,6 +36,10 @@ const RegisterLastPage = () => {
   const navigation = useNavigation();
   return <RegisterLastScreen navigation={navigation} />;
 };
+const MobileLoginPage = () => {
+  const navigation = useNavigation();
+  return <MobileLoginScreen navigation={navigation} />;
+};
 
 function App() {
   return (
@@ -43,9 +48,10 @@ function App() {
         <Stack.Screen name="Home" component={HomePage} />
         <Stack.Screen name="Login" component={LoginPage} />
         <Stack.Screen name="RegisterFirst" component={RegisterFirstPage} />
-        <Stack.Screen name="MobileLogin" component={MobileLoginPage} />
+        <Stack.Screen name="MobileRegister" component={MobileRegisterPage} />
         <Stack.Screen name="Verification" component={VerificationPage} />
         <Stack.Screen name="RegisterLast" component={RegisterLastPage} />
+        <Stack.Screen name="MobileLogin" component={MobileLoginPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );

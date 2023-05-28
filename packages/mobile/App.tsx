@@ -1,6 +1,10 @@
 import * as React from 'react';
 import {View, Text} from 'react-native';
-import {NavigationContainer, useNavigation} from '@react-navigation/native';
+import {
+  NavigationContainer,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import LoginScreen from 'common/dist/screens/LoginScreen';
 import HomeScreen from 'common/dist/screens/HomeScreen';
@@ -38,7 +42,7 @@ const RegisterLastPage = () => {
 };
 const MobileLoginPage = () => {
   const navigation = useNavigation();
-  return <MobileLoginScreen navigation={navigation} />;
+  return <MobileLoginScreen navigation={navigation}  />;
 };
 
 function App() {

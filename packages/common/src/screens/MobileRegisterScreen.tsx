@@ -22,7 +22,35 @@ const MobileRegisterScreen = (props: Props) => {
     }
   }, [qatarID]);
 
-  const handleSubmit = () => {
+  // const handleSubmit = async () => {
+  //     try {
+  //       const formData = {
+  //         serviceNumber: mobileNumber,
+  //         qid: qatarID,
+  //       };
+
+  //       const response = await fetch("http://localhost:8080/validateServiceNumberForRegistration", {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify(formData),
+  //       });
+
+  //       if (!response.ok) {
+  //         throw new Error("API request failed");
+  //       }
+  //       if (Platform.OS !== "web") {
+  //         navigation.navigate("Step Three");
+  //       } else {
+  //       }
+  //     } catch (error) {
+  //       console.error(error);
+  //     } finally {
+  //     }
+  // };
+
+  const handleSubmit = async () => {
     if (!validateQID(qatarID)) {
       setErrorQID("Invalid Qatar ID");
       return;
@@ -33,25 +61,15 @@ const MobileRegisterScreen = (props: Props) => {
       qid: qatarID,
     };
 
-    fetch("http://localhost:8080/validateServiceNumberForRegistration", {
+    await fetch("http://localhost:8080/validateServiceNumberForRegistration", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data) {
-          console.log("data", data);
-        } else {
-          Platform.OS === "web"
-            ? (window.location.href = "verification")
-            : navigation.navigate("Verification");
-          console.log("data", data);
-        }
-      })
-      .catch((error) => console.log("error", error));
+      .then((res) => res?.json())
+      .catch((error) => error);
   };
 
   return (

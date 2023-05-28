@@ -68,12 +68,11 @@ var VerificationCodeInput_1 = __importDefault(require("../components/Verificatio
 var colors_1 = require("../constans/colors");
 var Button_1 = __importDefault(require("../components/Button"));
 var VerificationScreen = function (props) {
-    var navigation = props.navigation, route = props.route;
+    var navigation = props.navigation, useRoute = props.useRoute;
     var _a = (0, react_1.useState)(["", "", "", ""]), code = _a[0], setCode = _a[1];
-    console.log("route", route === null || route === void 0 ? void 0 : route.params);
     console.log("code", code);
     var handleSubmit = function () { return __awaiter(void 0, void 0, void 0, function () {
-        var formData, response, url, error_1;
+        var formData, response, url, route, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -100,6 +99,8 @@ var VerificationScreen = function (props) {
                     }
                     url = "/registerlast?serviceNumber&code=".concat(code);
                     if (react_native_1.Platform.OS !== "web") {
+                        route = useRoute();
+                        console.log("route", route);
                         navigation.navigate("RegisterLast");
                     }
                     else {

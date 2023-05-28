@@ -6,13 +6,12 @@ import Button from "../components/Button";
 
 interface Props {
   navigation?: any;
-  route?: any;
+  useRoute?: any
 }
 
 const VerificationScreen = (props: Props) => {
-  const { navigation, route } = props;
+  const { navigation } = props;
   const [code, setCode] = useState<string[]>(["", "", "", ""]);
-  console.log("route", route?.params);
   console.log("code", code);
 
   const handleSubmit = async () => {

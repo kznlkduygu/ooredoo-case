@@ -15,12 +15,12 @@ interface Props {
 }
 
 const MobileLoginScreen = (props: Props) => {
-  const { navigation } = props;
+  const { navigation} = props;
   const [mobileNumber, setMobileNumber] = useState("");
   const handleMobileChange = (text: string) => {
     setMobileNumber(text);
   };
-  
+
   const handleSubmit = async () => {
     if (mobileNumber) {
       try {
@@ -28,13 +28,16 @@ const MobileLoginScreen = (props: Props) => {
           serviceNumber: mobileNumber,
         };
 
-        const response = await fetch("http://localhost:8080/login/serviceNumber", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        });
+        const response = await fetch(
+          "http://localhost:8080/login/serviceNumber",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+          }
+        );
 
         if (!response.ok) {
           throw new Error("API request failed");
@@ -43,7 +46,7 @@ const MobileLoginScreen = (props: Props) => {
         if (Platform.OS === "web") {
           window.location.href = url;
         } else {
-          navigation.navigate("Verification", { mobileNumber });
+          navigation.navigate("Verification", { mobileNumber: mobileNumber });
         }
       } catch (error) {
         console.error(error);

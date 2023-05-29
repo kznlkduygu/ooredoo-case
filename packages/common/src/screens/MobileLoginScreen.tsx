@@ -50,12 +50,13 @@ const MobileLoginScreen = (props: Props) => {
         );
 
         if (response.ok) {
-          const url = `/verification?mobileNumber=${mobileNumber}`;
+          const url = `/verification?mobileNumber=${mobileNumber}&isLogin=true`;
           if (Platform.OS === "web") {
             window.location.href = url;
           } else {
             navigation.navigate("Verification", {
               serviceNumber: mobileNumber,
+              isLogin: true
             });
           }
         }

@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Platform } from "react-native";
 import VerificationCodeInput from "../components/VerificationCodeInput";
 import { Colors } from "../constans/colors";
 import Button from "../components/Button";
+import CustomModal from "../components/CustomPopup";
 
 interface Props {
   navigation?: any;
@@ -13,20 +14,26 @@ const VerificationScreen = (props: Props) => {
   const { navigation, useRoute } = props;
 
   const [code, setCode] = useState<string[]>(["", "", "", ""]);
+  const [modalVisible, setModalVisible] = useState(false);
 
   let mobileNumberFinal: any;
   let qidFinal: any;
+  let isLoginFinal: any;
 
   if (Platform.OS === "web") {
     const params = new URLSearchParams(window.location.search);
     mobileNumberFinal = params.get("mobileNumber");
     qidFinal = params.get("qid");
+    isLoginFinal = params.get("isLogin");
   } else {
     const route = useRoute();
-    const { serviceNumber, qid } = route.params;
+    const { serviceNumber, qid, isLogin } = route.params;
     mobileNumberFinal = serviceNumber;
     qidFinal = qid;
+    isLoginFinal = isLogin;
   }
+
+  console.log("isLoginFinal", isLoginFinal);
 
   const handleSubmit = async () => {
     if (code?.length === 4) {
@@ -40,23 +47,25 @@ const VerificationScreen = (props: Props) => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Accept": "application/json",
+            Accept: "application/json",
           },
           body: JSON.stringify(formData),
         });
 
         if (response.status === 200) {
-          const url = `/registerlast?serviceNumber=${mobileNumberFinal}&qidFinal=${qidFinal}`;
-          if (Platform.OS !== "web") {
-            navigation.navigate("RegisterLast", {
-              serviceNumber: mobileNumberFinal,
-              qid: qidFinal,
-            });
+          if (isLoginFinal) {
+            setModalVisible(true);
           } else {
-            window.location.href = url;
+            const url = `/registerlast?serviceNumber=${mobileNumberFinal}&qidFinal=${qidFinal}`;
+            if (Platform.OS !== "web") {
+              navigation.navigate("RegisterLast", {
+                serviceNumber: mobileNumberFinal,
+                qid: qidFinal,
+              });
+            } else {
+              window.location.href = url;
+            }
           }
-        } else {
-          throw new Error("API request failed");
         }
       } catch (error) {
         console.error(error);
@@ -77,6 +86,11 @@ const VerificationScreen = (props: Props) => {
       <View style={styles.buttonContainer}>
         <Button title="Continue" onPress={handleSubmit} />
       </View>
+      <CustomModal
+        visible={modalVisible}
+        children={"👋 Welcome My Ooredoo 👋 "}
+        onClose={() => setModalVisible(false)}
+      />
     </View>
   );
 };

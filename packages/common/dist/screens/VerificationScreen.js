@@ -67,22 +67,28 @@ var react_native_1 = require("react-native");
 var VerificationCodeInput_1 = __importDefault(require("../components/VerificationCodeInput"));
 var colors_1 = require("../constans/colors");
 var Button_1 = __importDefault(require("../components/Button"));
+var CustomPopup_1 = __importDefault(require("../components/CustomPopup"));
 var VerificationScreen = function (props) {
     var navigation = props.navigation, useRoute = props.useRoute;
     var _a = (0, react_1.useState)(["", "", "", ""]), code = _a[0], setCode = _a[1];
+    var _b = (0, react_1.useState)(false), modalVisible = _b[0], setModalVisible = _b[1];
     var mobileNumberFinal;
     var qidFinal;
+    var isLoginFinal;
     if (react_native_1.Platform.OS === "web") {
         var params = new URLSearchParams(window.location.search);
         mobileNumberFinal = params.get("mobileNumber");
         qidFinal = params.get("qid");
+        isLoginFinal = params.get("isLogin");
     }
     else {
         var route = useRoute();
-        var _b = route.params, serviceNumber = _b.serviceNumber, qid = _b.qid;
+        var _c = route.params, serviceNumber = _c.serviceNumber, qid = _c.qid, isLogin = _c.isLogin;
         mobileNumberFinal = serviceNumber;
         qidFinal = qid;
+        isLoginFinal = isLogin;
     }
+    console.log("isLoginFinal", isLoginFinal);
     var handleSubmit = function () { return __awaiter(void 0, void 0, void 0, function () {
         var formData, response, url, error_1;
         return __generator(this, function (_a) {
@@ -100,26 +106,28 @@ var VerificationScreen = function (props) {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json",
-                                "Accept": "application/json",
+                                Accept: "application/json",
                             },
                             body: JSON.stringify(formData),
                         })];
                 case 2:
                     response = _a.sent();
                     if (response.status === 200) {
-                        url = "/registerlast?serviceNumber=".concat(mobileNumberFinal, "&qidFinal=").concat(qidFinal);
-                        if (react_native_1.Platform.OS !== "web") {
-                            navigation.navigate("RegisterLast", {
-                                serviceNumber: mobileNumberFinal,
-                                qid: qidFinal,
-                            });
+                        if (isLoginFinal) {
+                            setModalVisible(true);
                         }
                         else {
-                            window.location.href = url;
+                            url = "/registerlast?serviceNumber=".concat(mobileNumberFinal, "&qidFinal=").concat(qidFinal);
+                            if (react_native_1.Platform.OS !== "web") {
+                                navigation.navigate("RegisterLast", {
+                                    serviceNumber: mobileNumberFinal,
+                                    qid: qidFinal,
+                                });
+                            }
+                            else {
+                                window.location.href = url;
+                            }
                         }
-                    }
-                    else {
-                        throw new Error("API request failed");
                     }
                     return [3 /*break*/, 4];
                 case 3:
@@ -136,7 +144,8 @@ var VerificationScreen = function (props) {
         react_1.default.createElement(react_native_1.View, { style: { paddingHorizontal: 50, paddingTop: 20 } },
             react_1.default.createElement(VerificationCodeInput_1.default, { setCode: setCode, code: code })),
         react_1.default.createElement(react_native_1.View, { style: styles.buttonContainer },
-            react_1.default.createElement(Button_1.default, { title: "Continue", onPress: handleSubmit }))));
+            react_1.default.createElement(Button_1.default, { title: "Continue", onPress: handleSubmit })),
+        react_1.default.createElement(CustomPopup_1.default, { visible: modalVisible, children: "👋 Welcome My Ooredoo 👋 ", onClose: function () { return setModalVisible(false); } })));
 };
 exports.default = VerificationScreen;
 var styles = react_native_1.StyleSheet.create({

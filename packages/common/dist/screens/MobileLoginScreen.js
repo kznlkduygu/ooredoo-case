@@ -115,13 +115,14 @@ var MobileLoginScreen = function (props) {
                 case 2:
                     response = _a.sent();
                     if (response.ok) {
-                        url = "/verification?mobileNumber=".concat(mobileNumber);
+                        url = "/verification?mobileNumber=".concat(mobileNumber, "&isLogin=true");
                         if (react_native_1.Platform.OS === "web") {
                             window.location.href = url;
                         }
                         else {
                             navigation.navigate("Verification", {
                                 serviceNumber: mobileNumber,
+                                isLogin: true
                             });
                         }
                     }

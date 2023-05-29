@@ -15,14 +15,17 @@ const VerificationScreen = (props: Props) => {
   const [code, setCode] = useState<string[]>(["", "", "", ""]);
 
   let mobileNumberFinal: any;
+  let qidFinal: any;
 
   if (Platform.OS === "web") {
     const params = new URLSearchParams(window.location.search);
     mobileNumberFinal = params.get("mobileNumber");
+    qidFinal = params.get("qid");
   } else {
     const route = useRoute();
-    const { serviceNumber } = route.params;
+    const { serviceNumber, qid } = route.params;
     mobileNumberFinal = serviceNumber;
+    qidFinal = qid;
   }
 
   const handleSubmit = async () => {
@@ -43,9 +46,12 @@ const VerificationScreen = (props: Props) => {
         });
 
         if (response.status === 200) {
-          const url = `/registerlast?serviceNumber=${mobileNumberFinal}}`;
+          const url = `/registerlast?serviceNumber=${mobileNumberFinal}&qidFinal=${qidFinal}`;
           if (Platform.OS !== "web") {
-            navigation.navigate("RegisterLast");
+            navigation.navigate("RegisterLast", {
+              serviceNumber: mobileNumberFinal,
+              qid: qidFinal,
+            });
           } else {
             window.location.href = url;
           }

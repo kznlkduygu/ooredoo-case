@@ -120,13 +120,14 @@ var MobileRegisterScreen = function (props) {
                 case 2:
                     response = _a.sent();
                     if (!response.ok) return [3 /*break*/, 3];
-                    url = "/verification?mobileNumber=".concat(mobileNumber);
+                    url = "/verification?mobileNumber=".concat(mobileNumber, "&qid=").concat(qatarID);
                     if (react_native_1.Platform.OS === "web") {
                         window.location.href = url;
                     }
                     else {
                         navigation.navigate("Verification", {
                             serviceNumber: mobileNumber,
+                            qid: qatarID,
                         });
                     }
                     return [3 /*break*/, 5];

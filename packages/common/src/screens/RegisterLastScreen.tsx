@@ -7,7 +7,6 @@ import {
   Platform,
   ScrollView,
 } from "react-native";
-import VerificationCodeInput from "../components/VerificationCodeInput";
 import { Colors } from "../constans/colors";
 import Button from "../components/Button";
 import usePasswordValidation from "../hooks/validatePassword";
@@ -15,26 +14,62 @@ import CustomModal from "../components/CustomPopup";
 
 interface Props {
   navigation?: any;
+  useRoute?: any;
 }
 
 const RegisterLastScreen = (props: Props) => {
-  const { navigation } = props;
+  const { navigation, useRoute } = props;
+
   const { password, passwordError, handlePasswordChange } =
     usePasswordValidation();
-  const [mobileNumber, setMobileNumber] = useState("");
-  const [passportID, setPassportID] = useState("");
+    
   const [email, setEmail] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
 
-  const handleOpenModal = () => {
-    setModalVisible(true);
-  };
+  let mobileNumberFinal: any;
+  let qidFinal: any;
+
+  if (Platform.OS === "web") {
+    const params = new URLSearchParams(window.location.search);
+    mobileNumberFinal = params.get("serviceNumber");
+    qidFinal = params.get("qidFinal");
+  } else {
+    const route = useRoute();
+    const { serviceNumber, qid } = route.params;
+    mobileNumberFinal = serviceNumber;
+    qidFinal = qid;
+  }
+
 
   const handleCloseModal = () => {
     setModalVisible(false);
   };
-  const handleRegister = () => {
-    setModalVisible(true);
+
+  const handleSubmit = async () => {
+    try {
+      const formData = {
+        email: email,
+        password: password,
+        qid: qidFinal,
+        serviceNumber: mobileNumberFinal,
+      };
+
+      const response = await fetch("http://localhost:8080/registerCustomer", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        setModalVisible(true);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+    }
   };
 
   return (
@@ -48,15 +83,15 @@ const RegisterLastScreen = (props: Props) => {
         <TextInput
           style={styles.input}
           placeholder="Mobile Number"
-          value={mobileNumber}
-          onChangeText={setMobileNumber}
+          value={mobileNumberFinal}
+          editable={false}
           keyboardType="numeric"
         />
         <TextInput
           style={styles.input}
           placeholder="Passport ID"
-          value={passportID}
-          onChangeText={setPassportID}
+          value={qidFinal}
+          editable={false}
         />
         <TextInput
           style={styles.input}
@@ -78,13 +113,13 @@ const RegisterLastScreen = (props: Props) => {
           <Text style={styles.errorText}>{passwordError}</Text>
         )}
         <View style={{ alignItems: "center" }}>
-          <Button title="Register" onPress={() => setModalVisible(true)} />
+          <Button title="Register" onPress={handleSubmit} />
           <View>
             <CustomModal
               visible={modalVisible}
-              children={"Congratulations"}
+              children={"Congratulations, your registration successfully created."}
               onClose={handleCloseModal}
-            ></CustomModal>
+            />
           </View>
         </View>
       </View>

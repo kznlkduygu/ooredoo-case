@@ -71,14 +71,19 @@ var VerificationScreen = function (props) {
     var navigation = props.navigation, useRoute = props.useRoute;
     var _a = (0, react_1.useState)(["", "", "", ""]), code = _a[0], setCode = _a[1];
     var mobileNumberFinal;
+    var qidFinal;
+    console.log("qidFinal", qidFinal);
+    console.log("mobileNumberFinal", mobileNumberFinal);
     if (react_native_1.Platform.OS === "web") {
         var params = new URLSearchParams(window.location.search);
         mobileNumberFinal = params.get("mobileNumber");
+        qidFinal = params.get("qid");
     }
     else {
         var route = useRoute();
-        var serviceNumber = route.params.serviceNumber;
+        var _b = route.params, serviceNumber = _b.serviceNumber, qid = _b.qid;
         mobileNumberFinal = serviceNumber;
+        qidFinal = qid;
     }
     var handleSubmit = function () { return __awaiter(void 0, void 0, void 0, function () {
         var formData, response, url, error_1;
@@ -104,9 +109,12 @@ var VerificationScreen = function (props) {
                 case 2:
                     response = _a.sent();
                     if (response.status === 200) {
-                        url = "/registerlast?serviceNumber=".concat(mobileNumberFinal, "}");
+                        url = "/registerlast?serviceNumber=".concat(mobileNumberFinal, "&qidFinal=").concat(qidFinal);
                         if (react_native_1.Platform.OS !== "web") {
-                            navigation.navigate("RegisterLast");
+                            navigation.navigate("RegisterLast", {
+                                serviceNumber: mobileNumberFinal,
+                                qid: qidFinal,
+                            });
                         }
                         else {
                             window.location.href = url;

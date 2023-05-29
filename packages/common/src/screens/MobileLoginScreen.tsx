@@ -49,14 +49,15 @@ const MobileLoginScreen = (props: Props) => {
           }
         );
 
-        if (!response.ok) {
-          throw new Error("API request failed");
-        }
-        const url = `/verification?mobileNumber=${mobileNumber}`;
-        if (Platform.OS === "web") {
-          window.location.href = url;
-        } else {
-          navigation.navigate("Verification", { mobileNumber: mobileNumber });
+        if (response.ok) {
+          const url = `/verification?mobileNumber=${mobileNumber}`;
+          if (Platform.OS === "web") {
+            window.location.href = url;
+          } else {
+            navigation.navigate("Verification", {
+              serviceNumber: mobileNumber,
+            });
+          }
         }
       } catch (error) {
         console.error(error);

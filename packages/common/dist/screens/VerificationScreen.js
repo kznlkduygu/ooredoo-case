@@ -80,6 +80,7 @@ var VerificationScreen = function (props) {
         var serviceNumber = route.params.serviceNumber;
         mobileNumberFinal = serviceNumber;
     }
+    console.log("Login --> mobileNumberFinal", mobileNumberFinal);
     var handleSubmit = function () { return __awaiter(void 0, void 0, void 0, function () {
         var formData, response, url, error_1;
         return __generator(this, function (_a) {

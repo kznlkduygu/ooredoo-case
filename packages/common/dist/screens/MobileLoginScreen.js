@@ -114,15 +114,16 @@ var MobileLoginScreen = function (props) {
                         })];
                 case 2:
                     response = _a.sent();
-                    if (!response.ok) {
-                        throw new Error("API request failed");
-                    }
-                    url = "/verification?mobileNumber=".concat(mobileNumber);
-                    if (react_native_1.Platform.OS === "web") {
-                        window.location.href = url;
-                    }
-                    else {
-                        navigation.navigate("Verification", { mobileNumber: mobileNumber });
+                    if (response.ok) {
+                        url = "/verification?mobileNumber=".concat(mobileNumber);
+                        if (react_native_1.Platform.OS === "web") {
+                            window.location.href = url;
+                        }
+                        else {
+                            navigation.navigate("Verification", {
+                                serviceNumber: mobileNumber,
+                            });
+                        }
                     }
                     return [3 /*break*/, 5];
                 case 3:

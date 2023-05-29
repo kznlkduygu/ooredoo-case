@@ -15,7 +15,7 @@ const VerificationScreen = (props: Props) => {
   const [code, setCode] = useState<string[]>(["", "", "", ""]);
 
   let mobileNumberFinal: any;
-  
+
   if (Platform.OS === "web") {
     const params = new URLSearchParams(window.location.search);
     mobileNumberFinal = params.get("mobileNumber");
@@ -25,38 +25,37 @@ const VerificationScreen = (props: Props) => {
     mobileNumberFinal = serviceNumber;
   }
 
-const handleSubmit = async () => {
-  if (code?.length === 4) {
-    try {
-      const formData = {
-        serviceNumber: mobileNumberFinal,
-        otp: code?.join(""),
-      };
+  const handleSubmit = async () => {
+    if (code?.length === 4) {
+      try {
+        const formData = {
+          serviceNumber: mobileNumberFinal,
+          otp: code?.join(""),
+        };
 
-      const response = await fetch("http://localhost:8080/verifyOTP", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+        const response = await fetch("http://localhost:8080/verifyOTP", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        });
 
-      if (response.status === 200) {
-        const url = `/registerlast?serviceNumber=${mobileNumberFinal}}`;
-        if (Platform.OS !== "web") {
-          navigation.navigate("RegisterLast");
+        if (response.status === 200) {
+          const url = `/registerlast?serviceNumber=${mobileNumberFinal}}`;
+          if (Platform.OS !== "web") {
+            navigation.navigate("RegisterLast");
+          } else {
+            window.location.href = url;
+          }
         } else {
-          window.location.href = url;
+          throw new Error("API request failed");
         }
-      } else {
-        throw new Error("API request failed");
+      } catch (error) {
+        console.error(error);
       }
-    } catch (error) {
-      console.error(error);
     }
-  }
-};
-
+  };
 
   return (
     <View style={styles.container}>

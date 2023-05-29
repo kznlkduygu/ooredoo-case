@@ -56,7 +56,7 @@ const MobileLoginScreen = (props: Props) => {
           } else {
             navigation.navigate("Verification", {
               serviceNumber: mobileNumber,
-              isLogin: true
+              isLogin: true,
             });
           }
         }
@@ -97,6 +97,7 @@ const MobileLoginScreen = (props: Props) => {
         </View>
         <View style={styles.inputContainer}>
           <TextInput
+            maxLength={8}
             style={styles.input}
             onChangeText={handleMobileChange}
             placeholder="Mobile Number"

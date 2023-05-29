@@ -112,8 +112,12 @@ var LoginScreen = function (props) {
                         })];
                 case 1:
                     response = _a.sent();
+                    console.log("response", response);
                     if (response.ok) {
                         setModalVisible(true);
+                    }
+                    else if (response.status === 403) {
+                        react_native_1.Alert.alert("Wrong login");
                     }
                     return [3 /*break*/, 3];
                 case 2:
@@ -146,7 +150,7 @@ var styles = react_native_1.StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: colors_1.Colors.primaryWhite
+        backgroundColor: colors_1.Colors.primaryWhite,
     },
     input: {
         width: "85%",

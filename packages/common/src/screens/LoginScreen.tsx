@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   Platform,
+  Alert,
 } from "react-native";
 import Button from "../components/Button";
 import { Colors } from "../constans/colors";
@@ -46,8 +47,11 @@ const LoginScreen: React.FC = (props: Props) => {
         body: JSON.stringify(data),
       });
 
+      console.log("response", response);
       if (response.ok) {
         setModalVisible(true);
+      } else if (response.status === 403) {
+        Alert.alert("Wrong login");
       }
     } catch (error) {
       console.error(error);
@@ -111,7 +115,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: Colors.primaryWhite
+    backgroundColor: Colors.primaryWhite,
   },
   input: {
     width: "85%",

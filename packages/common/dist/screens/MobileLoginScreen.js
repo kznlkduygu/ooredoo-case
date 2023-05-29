@@ -122,7 +122,7 @@ var MobileLoginScreen = function (props) {
                         else {
                             navigation.navigate("Verification", {
                                 serviceNumber: mobileNumber,
-                                isLogin: true
+                                isLogin: true,
                             });
                         }
                     }
@@ -149,7 +149,7 @@ var MobileLoginScreen = function (props) {
                     } },
                     react_1.default.createElement(react_native_1.Text, { style: __assign(__assign({}, styles.subtitle), { paddingHorizontal: 0, color: colors_1.Colors.primaryRed }) }, "username and password"))),
             react_1.default.createElement(react_native_1.View, { style: styles.inputContainer },
-                react_1.default.createElement(react_native_1.TextInput, { style: styles.input, onChangeText: handleMobileChange, placeholder: "Mobile Number" }),
+                react_1.default.createElement(react_native_1.TextInput, { maxLength: 8, style: styles.input, onChangeText: handleMobileChange, placeholder: "Mobile Number" }),
                 errorMobileNumber ? (react_1.default.createElement(react_native_1.Text, { style: styles.error }, errorMobileNumber)) : null)),
         react_1.default.createElement(react_native_1.View, { style: styles.buttonContainer },
             react_1.default.createElement(Button_1.default, { title: "Continue", onPress: handleSubmit }))));

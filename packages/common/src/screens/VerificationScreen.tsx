@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Platform } from "react-native";
+import { View, Text, StyleSheet, Platform, Alert } from "react-native";
 import VerificationCodeInput from "../components/VerificationCodeInput";
 import { Colors } from "../constans/colors";
 import Button from "../components/Button";
@@ -36,7 +36,6 @@ const VerificationScreen = (props: Props) => {
     landline = isLandline;
   }
 
-
   const handleSubmit = async () => {
     if (code?.length === 4) {
       try {
@@ -68,6 +67,8 @@ const VerificationScreen = (props: Props) => {
               window.location.href = url;
             }
           }
+        } else if (response.status === 401) {
+          Alert.alert("The entered code is incorrect");
         }
       } catch (error) {
         console.error(error);

@@ -114,6 +114,7 @@ var VerificationScreen = function (props) {
                         })];
                 case 2:
                     response = _a.sent();
+                    console.log("response", response);
                     if (response.status === 200) {
                         if (isLoginFinal) {
                             setModalVisible(true);
@@ -130,6 +131,9 @@ var VerificationScreen = function (props) {
                                 window.location.href = url;
                             }
                         }
+                    }
+                    else if (response.status === 401) {
+                        react_native_1.Alert.alert("The entered code is incorrect");
                     }
                     return [3 /*break*/, 4];
                 case 3:

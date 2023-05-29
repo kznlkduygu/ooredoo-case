@@ -86,9 +86,7 @@ var MobileRegisterScreen = function (props) {
         var isLandline = (_a = route.params) === null || _a === void 0 ? void 0 : _a.isLandline;
         landline = isLandline;
     }
-    console.log("landline", landline === true);
     var landlineControl = landline === true || landline === "true";
-    console.log("landlineControl", landlineControl);
     (0, react_1.useEffect)(function () {
         if (qatarID && !(0, validateQID_1.validateQID)(qatarID)) {
             setErrorQID("Invalid Qatar ID");

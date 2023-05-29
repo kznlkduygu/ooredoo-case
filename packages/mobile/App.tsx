@@ -34,7 +34,7 @@ const MobileRegisterPage = () => {
 };
 const VerificationPage = () => {
   const navigation = useNavigation();
-  return <VerificationScreen navigation={navigation} />;
+  return <VerificationScreen navigation={navigation} useRoute={useRoute} />;
 };
 const RegisterLastPage = () => {
   const navigation = useNavigation();

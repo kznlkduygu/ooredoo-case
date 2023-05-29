@@ -6,46 +6,57 @@ import Button from "../components/Button";
 
 interface Props {
   navigation?: any;
-  useRoute?: any
+  useRoute?: any;
 }
 
 const VerificationScreen = (props: Props) => {
-  const { navigation } = props;
+  const { navigation, useRoute } = props;
+
   const [code, setCode] = useState<string[]>(["", "", "", ""]);
-  console.log("code", code);
 
-  const handleSubmit = async () => {
-    if (code?.length === 4) {
-      console.log("İstek atıldı");
-      try {
-        const formData = {
-          serviceNumber: 234234,
-          otp: code?.join(""),
-        };
+  let mobileNumberFinal: any;
+  
+  if (Platform.OS === "web") {
+    const params = new URLSearchParams(window.location.search);
+    mobileNumberFinal = params.get("mobileNumber");
+  } else {
+    const route = useRoute();
+    const { serviceNumber } = route.params;
+    mobileNumberFinal = serviceNumber;
+  }
 
-        const response = await fetch("http://localhost:8080/verifyOTP", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        });
+const handleSubmit = async () => {
+  if (code?.length === 4) {
+    try {
+      const formData = {
+        serviceNumber: mobileNumberFinal,
+        otp: code?.join(""),
+      };
 
-        if (!response.ok) {
-          throw new Error("API request failed");
-        }
-        const url = `/registerlast?serviceNumber&code=${code}`;
+      const response = await fetch("http://localhost:8080/verifyOTP", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.status === 200) {
+        const url = `/registerlast?serviceNumber=${mobileNumberFinal}}`;
         if (Platform.OS !== "web") {
           navigation.navigate("RegisterLast");
         } else {
           window.location.href = url;
         }
-      } catch (error) {
-        console.error(error);
-      } finally {
+      } else {
+        throw new Error("API request failed");
       }
+    } catch (error) {
+      console.error(error);
     }
-  };
+  }
+};
+
 
   return (
     <View style={styles.container}>

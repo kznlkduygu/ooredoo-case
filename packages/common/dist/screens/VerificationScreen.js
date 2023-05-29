@@ -68,21 +68,29 @@ var VerificationCodeInput_1 = __importDefault(require("../components/Verificatio
 var colors_1 = require("../constans/colors");
 var Button_1 = __importDefault(require("../components/Button"));
 var VerificationScreen = function (props) {
-    var navigation = props.navigation;
+    var navigation = props.navigation, useRoute = props.useRoute;
     var _a = (0, react_1.useState)(["", "", "", ""]), code = _a[0], setCode = _a[1];
-    console.log("code", code);
+    var mobileNumberFinal;
+    if (react_native_1.Platform.OS === "web") {
+        var params = new URLSearchParams(window.location.search);
+        mobileNumberFinal = params.get("mobileNumber");
+    }
+    else {
+        var route = useRoute();
+        var serviceNumber = route.params.serviceNumber;
+        mobileNumberFinal = serviceNumber;
+    }
     var handleSubmit = function () { return __awaiter(void 0, void 0, void 0, function () {
         var formData, response, url, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    if (!((code === null || code === void 0 ? void 0 : code.length) === 4)) return [3 /*break*/, 5];
-                    console.log("İstek atıldı");
+                    if (!((code === null || code === void 0 ? void 0 : code.length) === 4)) return [3 /*break*/, 4];
                     _a.label = 1;
                 case 1:
-                    _a.trys.push([1, 3, 4, 5]);
+                    _a.trys.push([1, 3, , 4]);
                     formData = {
-                        serviceNumber: 234234,
+                        serviceNumber: mobileNumberFinal,
                         otp: code === null || code === void 0 ? void 0 : code.join(""),
                     };
                     return [4 /*yield*/, fetch("http://localhost:8080/verifyOTP", {
@@ -94,23 +102,24 @@ var VerificationScreen = function (props) {
                         })];
                 case 2:
                     response = _a.sent();
-                    if (!response.ok) {
-                        throw new Error("API request failed");
-                    }
-                    url = "/registerlast?serviceNumber&code=".concat(code);
-                    if (react_native_1.Platform.OS !== "web") {
-                        navigation.navigate("RegisterLast");
+                    if (response.status === 200) {
+                        url = "/registerlast?serviceNumber=".concat(mobileNumberFinal, "}");
+                        if (react_native_1.Platform.OS !== "web") {
+                            navigation.navigate("RegisterLast");
+                        }
+                        else {
+                            window.location.href = url;
+                        }
                     }
                     else {
-                        window.location.href = url;
+                        throw new Error("API request failed");
                     }
-                    return [3 /*break*/, 5];
+                    return [3 /*break*/, 4];
                 case 3:
                     error_1 = _a.sent();
                     console.error(error_1);
-                    return [3 /*break*/, 5];
-                case 4: return [7 /*endfinally*/];
-                case 5: return [2 /*return*/];
+                    return [3 /*break*/, 4];
+                case 4: return [2 /*return*/];
             }
         });
     }); };

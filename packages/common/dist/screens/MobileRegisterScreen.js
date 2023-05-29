@@ -68,12 +68,24 @@ var Button_1 = __importDefault(require("../components/Button"));
 var validateQID_1 = require("../utils/validateQID");
 var validateMobileNumber_1 = require("../utils/validateMobileNumber");
 var colors_1 = require("../constans/colors");
+var validateLandline_1 = require("../utils/validateLandline");
 var MobileRegisterScreen = function (props) {
-    var navigation = props.navigation;
+    var navigation = props.navigation, useRoute = props.useRoute;
     var _a = (0, react_1.useState)(""), mobileNumber = _a[0], setMobileNumber = _a[1];
     var _b = (0, react_1.useState)(""), qatarID = _b[0], setQatarID = _b[1];
     var _c = (0, react_1.useState)(""), errorQID = _c[0], setErrorQID = _c[1];
     var _d = (0, react_1.useState)(""), errorMobileNumber = _d[0], setErrorMobileNumber = _d[1];
+    var landline;
+    if (react_native_1.Platform.OS === "web") {
+        var params = new URLSearchParams(window.location.search);
+        landline = params.get("isLandline");
+    }
+    else {
+        var route = useRoute();
+        var isLandline = route.params.isLandline;
+        landline = isLandline;
+    }
+    console.log("landline", landline);
     (0, react_1.useEffect)(function () {
         if (qatarID && !(0, validateQID_1.validateQID)(qatarID)) {
             setErrorQID("Invalid Qatar ID");
@@ -83,26 +95,26 @@ var MobileRegisterScreen = function (props) {
         }
     }, [qatarID]);
     (0, react_1.useEffect)(function () {
-        if (mobileNumber && !(0, validateMobileNumber_1.validateMobileNumber)(mobileNumber)) {
-            setErrorMobileNumber("Invalid Mobile Number");
+        var error = "";
+        if (mobileNumber) {
+            if (landline) {
+                if (!(0, validateLandline_1.validateLandlineNumber)(mobileNumber)) {
+                    error = "Invalid Landline Number";
+                }
+            }
+            else {
+                if (!(0, validateMobileNumber_1.validateMobileNumber)(mobileNumber)) {
+                    error = "Invalid Mobile Number";
+                }
+            }
         }
-        else {
-            setErrorMobileNumber("");
-        }
-    }, [mobileNumber]);
+        setErrorMobileNumber(error);
+    }, [mobileNumber, landline]);
     var handleSubmit = function () { return __awaiter(void 0, void 0, void 0, function () {
         var data, response, url, responseData, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    if (!(0, validateMobileNumber_1.validateMobileNumber)(mobileNumber)) {
-                        setErrorQID("Invalid Qatar ID");
-                        return [2 /*return*/];
-                    }
-                    if (!(0, validateQID_1.validateQID)(qatarID)) {
-                        setErrorMobileNumber("Invalid Mobile Number");
-                        return [2 /*return*/];
-                    }
                     data = {
                         serviceNumber: mobileNumber,
                         qid: qatarID,
@@ -120,7 +132,7 @@ var MobileRegisterScreen = function (props) {
                 case 2:
                     response = _a.sent();
                     if (!response.ok) return [3 /*break*/, 3];
-                    url = "/verification?mobileNumber=".concat(mobileNumber, "&qid=").concat(qatarID);
+                    url = "/verification?mobileNumber=".concat(mobileNumber, "&qid=").concat(qatarID, "&isLandline=").concat(landline);
                     if (react_native_1.Platform.OS === "web") {
                         window.location.href = url;
                     }
@@ -128,6 +140,7 @@ var MobileRegisterScreen = function (props) {
                         navigation.navigate("Verification", {
                             serviceNumber: mobileNumber,
                             qid: qatarID,
+                            isLandline: landline,
                         });
                     }
                     return [3 /*break*/, 5];
@@ -150,10 +163,10 @@ var MobileRegisterScreen = function (props) {
             react_1.default.createElement(react_native_1.Text, { style: styles.title }, "Welcome to Ooredoo \uD83D\uDC4B"),
             react_1.default.createElement(react_native_1.Text, { style: styles.subtitle }, "Please fill in your information below. Your mobile number should start with either 3, 5, 6, or 7."),
             react_1.default.createElement(react_native_1.View, { style: styles.inputContainer },
-                react_1.default.createElement(react_native_1.TextInput, { onChangeText: function (text) { return setMobileNumber(text); }, style: styles.input, placeholder: "Mobile Number" }),
+                react_1.default.createElement(react_native_1.TextInput, { maxLength: 8, onChangeText: function (text) { return setMobileNumber(text); }, style: styles.input, placeholder: landline ? "Landline" : "Mobile Number" }),
                 errorMobileNumber ? (react_1.default.createElement(react_native_1.Text, { style: styles.error }, errorMobileNumber)) : null),
             react_1.default.createElement(react_native_1.View, { style: styles.inputContainer },
-                react_1.default.createElement(react_native_1.TextInput, { onChangeText: function (text) { return setQatarID(text); }, style: styles.input, placeholder: "Qatar ID or Passport ID" }),
+                react_1.default.createElement(react_native_1.TextInput, { maxLength: 11, onChangeText: function (text) { return setQatarID(text); }, style: styles.input, placeholder: "Qatar ID or Passport ID" }),
                 errorQID ? react_1.default.createElement(react_native_1.Text, { style: styles.error }, errorQID) : null)),
         react_1.default.createElement(react_native_1.View, { style: styles.buttonContainer },
             react_1.default.createElement(Button_1.default, { title: "Continue", onPress: handleSubmit }))));

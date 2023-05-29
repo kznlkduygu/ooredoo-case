@@ -12,21 +12,25 @@ var RegisterFirst = function (props) {
         react_1.default.createElement(react_native_1.View, null,
             react_1.default.createElement(react_native_1.Text, { style: styles.title }, "Register with"),
             react_1.default.createElement(react_native_1.Text, { style: styles.subtitle }, "Please select your registration type")),
-        react_1.default.createElement(react_native_1.TouchableOpacity, { onPress: function () {
-                react_native_1.Platform.OS === "web"
-                    ? (window.location.href = "mobileregister")
-                    : navigation.navigate("MobileRegister");
-            }, style: styles.buttonContainer },
-            react_1.default.createElement(react_native_1.Text, { style: styles.buttonText }, "Mobile Number")),
         react_1.default.createElement(react_native_1.View, { style: styles.sectionContainer },
-            react_1.default.createElement(react_native_1.TouchableOpacity, { style: styles.sectionButton },
-                react_1.default.createElement(react_native_1.Text, { style: styles.sectionButtonText }, "Landline Number")),
             react_1.default.createElement(react_native_1.TouchableOpacity, { onPress: function () {
+                    var url = "/mobileregister?isLandline=false";
                     react_native_1.Platform.OS === "web"
-                        ? (window.location.href = "mobileregister")
-                        : navigation.navigate("MobileRegister");
-                }, style: [styles.sectionButton, styles.sectionButtonMargin] },
-                react_1.default.createElement(react_native_1.Text, { style: styles.sectionButtonText }, "Mobile Broadband Number")))));
+                        ? (window.location.href = url)
+                        : navigation.navigate("MobileRegister", {
+                            isLogin: false,
+                        });
+                }, style: styles.buttonContainer },
+                react_1.default.createElement(react_native_1.Text, { style: styles.buttonText }, "Mobile Number")),
+            react_1.default.createElement(react_native_1.TouchableOpacity, { onPress: function () {
+                    var url = "/mobileregister?isLandline=true";
+                    react_native_1.Platform.OS === "web"
+                        ? (window.location.href = url)
+                        : navigation.navigate("MobileRegister", {
+                            isLandline: true,
+                        });
+                }, style: styles.sectionButton },
+                react_1.default.createElement(react_native_1.Text, { style: styles.sectionButtonText }, "Landline Number")))));
 };
 exports.default = RegisterFirst;
 var styles = react_native_1.StyleSheet.create({

@@ -30,7 +30,7 @@ const RegisterFirstPage = () => {
 };
 const MobileRegisterPage = () => {
   const navigation = useNavigation();
-  return <MobileRegisterScreen navigation={navigation} />;
+  return <MobileRegisterScreen navigation={navigation} useRoute={useRoute} />;
 };
 const VerificationPage = () => {
   const navigation = useNavigation();

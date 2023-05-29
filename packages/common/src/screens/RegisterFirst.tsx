@@ -22,29 +22,33 @@ const RegisterFirst = (props: Props) => {
           Please select your registration type
         </Text>
       </View>
-      <TouchableOpacity
-        onPress={() => {
-          Platform.OS === "web"
-            ? (window.location.href = "mobileregister")
-            : navigation.navigate("MobileRegister");
-        }}
-        style={styles.buttonContainer}
-      >
-        <Text style={styles.buttonText}>Mobile Number</Text>
-      </TouchableOpacity>
+
       <View style={styles.sectionContainer}>
-        <TouchableOpacity style={styles.sectionButton}>
-          <Text style={styles.sectionButtonText}>Landline Number</Text>
+        <TouchableOpacity
+          onPress={() => {
+            const url = `/mobileregister?isLandline=false`;
+            Platform.OS === "web"
+              ? (window.location.href = url)
+              : navigation.navigate("MobileRegister", {
+                  isLogin: false,
+                });
+          }}
+          style={styles.buttonContainer}
+        >
+          <Text style={styles.buttonText}>Mobile Number</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
+            const url = `/mobileregister?isLandline=true`;
             Platform.OS === "web"
-              ? (window.location.href = "mobileregister")
-              : navigation.navigate("MobileRegister");
+              ? (window.location.href = url)
+              : navigation.navigate("MobileRegister", {
+                  isLandline: true,
+                });
           }}
-          style={[styles.sectionButton, styles.sectionButtonMargin]}
+          style={styles.sectionButton}
         >
-          <Text style={styles.sectionButtonText}>Mobile Broadband Number</Text>
+          <Text style={styles.sectionButtonText}>Landline Number</Text>
         </TouchableOpacity>
       </View>
     </View>

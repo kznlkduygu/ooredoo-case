@@ -75,20 +75,23 @@ var VerificationScreen = function (props) {
     var mobileNumberFinal;
     var qidFinal;
     var isLoginFinal;
+    var landline;
     if (react_native_1.Platform.OS === "web") {
         var params = new URLSearchParams(window.location.search);
         mobileNumberFinal = params.get("mobileNumber");
         qidFinal = params.get("qid");
         isLoginFinal = params.get("isLogin");
+        landline = params.get("isLandline");
     }
     else {
         var route = useRoute();
-        var _c = route.params, serviceNumber = _c.serviceNumber, qid = _c.qid, isLogin = _c.isLogin;
+        var _c = route.params, serviceNumber = _c.serviceNumber, qid = _c.qid, isLogin = _c.isLogin, isLandline = _c.isLandline;
         mobileNumberFinal = serviceNumber;
         qidFinal = qid;
         isLoginFinal = isLogin;
+        landline = isLandline;
     }
-    console.log("isLoginFinal", isLoginFinal);
+    console.log("landline", landline);
     var handleSubmit = function () { return __awaiter(void 0, void 0, void 0, function () {
         var formData, response, url, error_1;
         return __generator(this, function (_a) {

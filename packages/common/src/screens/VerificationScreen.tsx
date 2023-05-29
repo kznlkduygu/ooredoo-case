@@ -19,21 +19,23 @@ const VerificationScreen = (props: Props) => {
   let mobileNumberFinal: any;
   let qidFinal: any;
   let isLoginFinal: any;
+  let landline: any;
 
   if (Platform.OS === "web") {
     const params = new URLSearchParams(window.location.search);
     mobileNumberFinal = params.get("mobileNumber");
     qidFinal = params.get("qid");
     isLoginFinal = params.get("isLogin");
+    landline = params.get("isLandline");
   } else {
     const route = useRoute();
-    const { serviceNumber, qid, isLogin } = route.params;
+    const { serviceNumber, qid, isLogin, isLandline } = route.params;
     mobileNumberFinal = serviceNumber;
     qidFinal = qid;
     isLoginFinal = isLogin;
+    landline = isLandline;
   }
 
-  console.log("isLoginFinal", isLoginFinal);
 
   const handleSubmit = async () => {
     if (code?.length === 4) {

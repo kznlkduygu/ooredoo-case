@@ -4,17 +4,30 @@ import Button from "../components/Button";
 import { validateQID } from "../utils/validateQID";
 import { validateMobileNumber } from "../utils/validateMobileNumber";
 import { Colors } from "../constans/colors";
+import { validateLandlineNumber } from "../utils/validateLandline";
 
 interface Props {
   navigation?: any;
+  useRoute?: any;
 }
 
 const MobileRegisterScreen = (props: Props) => {
-  const { navigation } = props;
+  const { navigation, useRoute } = props;
   const [mobileNumber, setMobileNumber] = useState("");
   const [qatarID, setQatarID] = useState("");
   const [errorQID, setErrorQID] = useState("");
   const [errorMobileNumber, setErrorMobileNumber] = useState("");
+
+  let landline: any;
+
+  if (Platform.OS === "web") {
+    const params = new URLSearchParams(window.location.search);
+    landline = params.get("isLandline");
+  } else {
+    const route = useRoute();
+    const { isLandline } = route.params;
+    landline = isLandline;
+  }
 
   useEffect(() => {
     if (qatarID && !validateQID(qatarID)) {
@@ -25,24 +38,23 @@ const MobileRegisterScreen = (props: Props) => {
   }, [qatarID]);
 
   useEffect(() => {
-    if (mobileNumber && !validateMobileNumber(mobileNumber)) {
-      setErrorMobileNumber("Invalid Mobile Number");
-    } else {
-      setErrorMobileNumber("");
+    let error = "";
+    if (mobileNumber) {
+      if (landline) {
+        if (!validateLandlineNumber(mobileNumber)) {
+          error = "Invalid Landline Number";
+        }
+      } else {
+        if (!validateMobileNumber(mobileNumber)) {
+          error = "Invalid Mobile Number";
+        }
+      }
     }
-  }, [mobileNumber]);
+
+    setErrorMobileNumber(error);
+  }, [mobileNumber, landline]);
 
   const handleSubmit = async () => {
-    if (!validateMobileNumber(mobileNumber)) {
-      setErrorQID("Invalid Qatar ID");
-      return;
-    }
-
-    if (!validateQID(qatarID)) {
-      setErrorMobileNumber("Invalid Mobile Number");
-      return;
-    }
-
     const data = {
       serviceNumber: mobileNumber,
       qid: qatarID,
@@ -61,13 +73,14 @@ const MobileRegisterScreen = (props: Props) => {
       );
 
       if (response.ok) {
-        const url = `/verification?mobileNumber=${mobileNumber}&qid=${qatarID}`;
+        const url = `/verification?mobileNumber=${mobileNumber}&qid=${qatarID}&isLandline=${landline}`;
         if (Platform.OS === "web") {
           window.location.href = url;
         } else {
           navigation.navigate("Verification", {
             serviceNumber: mobileNumber,
             qid: qatarID,
+            isLandline: landline,
           });
         }
       } else {
@@ -89,9 +102,10 @@ const MobileRegisterScreen = (props: Props) => {
         </Text>
         <View style={styles.inputContainer}>
           <TextInput
+            maxLength={8}
             onChangeText={(text) => setMobileNumber(text)}
             style={styles.input}
-            placeholder="Mobile Number"
+            placeholder={landline ? "Landline" : "Mobile Number"}
           />
           {errorMobileNumber ? (
             <Text style={styles.error}>{errorMobileNumber}</Text>
@@ -99,6 +113,7 @@ const MobileRegisterScreen = (props: Props) => {
         </View>
         <View style={styles.inputContainer}>
           <TextInput
+            maxLength={11}
             onChangeText={(text) => setQatarID(text)}
             style={styles.input}
             placeholder="Qatar ID or Passport ID"

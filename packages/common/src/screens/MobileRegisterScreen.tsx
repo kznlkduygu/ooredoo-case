@@ -26,7 +26,7 @@ const MobileRegisterScreen = (props: Props) => {
 
   useEffect(() => {
     if (mobileNumber && !validateMobileNumber(mobileNumber)) {
-      setErrorMobileNumber("Invalid Mobile Nubmer");
+      setErrorMobileNumber("Invalid Mobile Number");
     } else {
       setErrorMobileNumber("");
     }
@@ -39,7 +39,7 @@ const MobileRegisterScreen = (props: Props) => {
     }
 
     if (!validateQID(qatarID)) {
-      setErrorMobileNumber("Invalid Mobile Nubmer");
+      setErrorMobileNumber("Invalid Mobile Number");
       return;
     }
 
@@ -125,13 +125,11 @@ const styles = StyleSheet.create({
     fontSize: 28,
     paddingHorizontal: 8,
     fontWeight: "700",
-    fontFamily: "Rubik",
   },
   subtitle: {
     fontSize: 16,
     paddingHorizontal: 8,
     fontWeight: "500",
-    fontFamily: "Rubik",
   },
   inputContainer: {
     padding: 8,

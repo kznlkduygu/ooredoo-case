@@ -111,6 +111,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: Colors.primaryWhite
   },
   input: {
     width: "85%",
@@ -124,13 +125,11 @@ const styles = StyleSheet.create({
     fontSize: 28,
     paddingHorizontal: 8,
     fontWeight: "700",
-    fontFamily: "Rubik",
   },
   subtitle: {
     fontSize: 16,
     paddingHorizontal: 8,
     fontWeight: "500",
-    fontFamily: "Rubik",
   },
 });
 

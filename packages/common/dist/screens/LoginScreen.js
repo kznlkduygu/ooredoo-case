@@ -146,6 +146,7 @@ var styles = react_native_1.StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
+        backgroundColor: colors_1.Colors.primaryWhite
     },
     input: {
         width: "85%",
@@ -159,13 +160,11 @@ var styles = react_native_1.StyleSheet.create({
         fontSize: 28,
         paddingHorizontal: 8,
         fontWeight: "700",
-        fontFamily: "Rubik",
     },
     subtitle: {
         fontSize: 16,
         paddingHorizontal: 8,
         fontWeight: "500",
-        fontFamily: "Rubik",
     },
 });
 exports.default = LoginScreen;

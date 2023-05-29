@@ -87,7 +87,7 @@ var MobileLoginScreen = function (props) {
     };
     (0, react_1.useEffect)(function () {
         if (mobileNumber && !(0, validateMobileNumber_1.validateMobileNumber)(mobileNumber)) {
-            setErrorMobileNumber("Invalid Mobile Nubmer");
+            setErrorMobileNumber("Invalid Mobile Number");
         }
         else {
             setErrorMobileNumber("");
@@ -166,13 +166,11 @@ var styles = react_native_1.StyleSheet.create({
         fontSize: 28,
         paddingHorizontal: 8,
         fontWeight: "700",
-        fontFamily: "Rubik",
     },
     subtitle: {
         fontSize: 16,
         paddingHorizontal: 8,
         fontWeight: "500",
-        fontFamily: "Rubik",
     },
     inputContainer: {
         padding: 8,

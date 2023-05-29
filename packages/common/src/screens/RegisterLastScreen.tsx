@@ -139,13 +139,11 @@ const styles = StyleSheet.create({
     fontSize: 28,
     paddingHorizontal: 8,
     fontWeight: "700",
-    fontFamily: "Rubik",
   },
   subtitle: {
     fontSize: 16,
     paddingHorizontal: 8,
     fontWeight: "500",
-    fontFamily: "Rubik",
   },
   buttonContainer: {
     alignItems: "center",

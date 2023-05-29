@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import Button from "../components/Button";
 import { Colors } from "../constans/colors";
+import CustomModal from "../components/CustomPopup";
 
 interface Props {
   navigation?: any;
@@ -18,6 +19,7 @@ const LoginScreen: React.FC = (props: Props) => {
   const { navigation } = props;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
 
   const handleEmailChange = (text: string) => {
     setEmail(text);
@@ -26,23 +28,30 @@ const LoginScreen: React.FC = (props: Props) => {
   const handlePasswordChange = (text: string) => {
     setPassword(text);
   };
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
+  const handleSubmit = async () => {
+    try {
+      const data = {
+        email: email,
+        password: password,
+      };
+      const response = await fetch("http://localhost:8080/login/username", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
-  const handleSubmit = () => {
-    const data = {
-      email: email,
-      password: password,
-    };
-    fetch("http://localhost:8080/login/username", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((data) => console.log("data", data))
-      .catch((error) => console.log("error", error));
+      if (response.ok) {
+        setModalVisible(true);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -88,6 +97,11 @@ const LoginScreen: React.FC = (props: Props) => {
         secureTextEntry
       />
       <Button title="Giriş Yap" onPress={handleSubmit} />
+      <CustomModal
+        visible={modalVisible}
+        children={"👋 Welcome My Ooredoo 👋 "}
+        onClose={handleCloseModal}
+      />
     </View>
   );
 };

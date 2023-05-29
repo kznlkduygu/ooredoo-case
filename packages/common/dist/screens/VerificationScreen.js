@@ -72,8 +72,6 @@ var VerificationScreen = function (props) {
     var _a = (0, react_1.useState)(["", "", "", ""]), code = _a[0], setCode = _a[1];
     var mobileNumberFinal;
     var qidFinal;
-    console.log("qidFinal", qidFinal);
-    console.log("mobileNumberFinal", mobileNumberFinal);
     if (react_native_1.Platform.OS === "web") {
         var params = new URLSearchParams(window.location.search);
         mobileNumberFinal = params.get("mobileNumber");

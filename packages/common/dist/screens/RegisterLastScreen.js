@@ -86,8 +86,6 @@ var RegisterLastScreen = function (props) {
         mobileNumberFinal = serviceNumber;
         qidFinal = qid;
     }
-    console.log("LASTmobileNumberFinal", mobileNumberFinal);
-    console.log("LASTqidFinal", qidFinal);
     var handleCloseModal = function () {
         setModalVisible(false);
     };

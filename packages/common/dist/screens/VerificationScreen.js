@@ -114,7 +114,6 @@ var VerificationScreen = function (props) {
                         })];
                 case 2:
                     response = _a.sent();
-                    console.log("response", response);
                     if (response.status === 200) {
                         if (isLoginFinal) {
                             setModalVisible(true);

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -9,17 +9,27 @@ import {
 } from "react-native";
 import { Colors } from "../constans/colors";
 import Button from "../components/Button";
+import { validateMobileNumber } from "../utils/validateMobileNumber";
 
 interface Props {
   navigation?: any;
 }
 
 const MobileLoginScreen = (props: Props) => {
-  const { navigation} = props;
+  const { navigation } = props;
   const [mobileNumber, setMobileNumber] = useState("");
+  const [errorMobileNumber, setErrorMobileNumber] = useState("");
+
   const handleMobileChange = (text: string) => {
     setMobileNumber(text);
   };
+  useEffect(() => {
+    if (mobileNumber && !validateMobileNumber(mobileNumber)) {
+      setErrorMobileNumber("Invalid Mobile Nubmer");
+    } else {
+      setErrorMobileNumber("");
+    }
+  }, [mobileNumber]);
 
   const handleSubmit = async () => {
     if (mobileNumber) {
@@ -89,6 +99,9 @@ const MobileLoginScreen = (props: Props) => {
             onChangeText={handleMobileChange}
             placeholder="Mobile Number"
           />
+          {errorMobileNumber ? (
+            <Text style={styles.error}>{errorMobileNumber}</Text>
+          ) : null}
         </View>
       </View>
       <View style={styles.buttonContainer}>
@@ -129,5 +142,9 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     alignItems: "center",
+  },
+  error: {
+    color: "red",
+    marginTop: 5,
   },
 });

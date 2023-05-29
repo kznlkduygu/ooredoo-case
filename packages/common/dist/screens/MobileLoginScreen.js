@@ -77,12 +77,22 @@ var react_1 = __importStar(require("react"));
 var react_native_1 = require("react-native");
 var colors_1 = require("../constans/colors");
 var Button_1 = __importDefault(require("../components/Button"));
+var validateMobileNumber_1 = require("../utils/validateMobileNumber");
 var MobileLoginScreen = function (props) {
     var navigation = props.navigation;
     var _a = (0, react_1.useState)(""), mobileNumber = _a[0], setMobileNumber = _a[1];
+    var _b = (0, react_1.useState)(""), errorMobileNumber = _b[0], setErrorMobileNumber = _b[1];
     var handleMobileChange = function (text) {
         setMobileNumber(text);
     };
+    (0, react_1.useEffect)(function () {
+        if (mobileNumber && !(0, validateMobileNumber_1.validateMobileNumber)(mobileNumber)) {
+            setErrorMobileNumber("Invalid Mobile Nubmer");
+        }
+        else {
+            setErrorMobileNumber("");
+        }
+    }, [mobileNumber]);
     var handleSubmit = function () { return __awaiter(void 0, void 0, void 0, function () {
         var formData, response, url, error_1;
         return __generator(this, function (_a) {
@@ -137,7 +147,8 @@ var MobileLoginScreen = function (props) {
                     } },
                     react_1.default.createElement(react_native_1.Text, { style: __assign(__assign({}, styles.subtitle), { paddingHorizontal: 0, color: colors_1.Colors.primaryRed }) }, "username and password"))),
             react_1.default.createElement(react_native_1.View, { style: styles.inputContainer },
-                react_1.default.createElement(react_native_1.TextInput, { style: styles.input, onChangeText: handleMobileChange, placeholder: "Mobile Number" }))),
+                react_1.default.createElement(react_native_1.TextInput, { style: styles.input, onChangeText: handleMobileChange, placeholder: "Mobile Number" }),
+                errorMobileNumber ? (react_1.default.createElement(react_native_1.Text, { style: styles.error }, errorMobileNumber)) : null)),
         react_1.default.createElement(react_native_1.View, { style: styles.buttonContainer },
             react_1.default.createElement(Button_1.default, { title: "Continue", onPress: handleSubmit }))));
 };
@@ -171,5 +182,9 @@ var styles = react_native_1.StyleSheet.create({
     },
     buttonContainer: {
         alignItems: "center",
+    },
+    error: {
+        color: "red",
+        marginTop: 5,
     },
 });

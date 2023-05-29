@@ -18,19 +18,17 @@ const MobileRegisterScreen = (props: Props) => {
   const [errorQID, setErrorQID] = useState("");
   const [errorMobileNumber, setErrorMobileNumber] = useState("");
 
-  const [landline, setLandline] = useState<any>(false);
+  let landline: any;
+  if (Platform.OS === "web") {
+    const params = new URLSearchParams(window.location.search);
+    landline = params.get("isLandline");
+  } else {
+    const route = useRoute();
+    const isLandline = route.params?.isLandline;
+    landline = isLandline;
+  }
 
-  useEffect(() => {
-    if (Platform.OS === "web") {
-      const params = new URLSearchParams(window.location.search);
-      setLandline(params.get("isLandline"));
-    } else {
-      const route = useRoute();
-      const { isLandline } = route.params;
-      setLandline(isLandline);
-    }
-  }, [landline]);
-
+  let landlineControl = landline === true || landline === "true";
   useEffect(() => {
     if (qatarID && !validateQID(qatarID)) {
       setErrorQID("Invalid Qatar ID");
@@ -42,7 +40,7 @@ const MobileRegisterScreen = (props: Props) => {
   useEffect(() => {
     let error = "";
     if (mobileNumber) {
-      if (landline) {
+      if (landlineControl) {
         if (!validateLandlineNumber(mobileNumber)) {
           error = "Invalid Landline Number";
         }
@@ -99,23 +97,24 @@ const MobileRegisterScreen = (props: Props) => {
       <View style={{ flex: 1 }}>
         <Text style={styles.title}>Welcome to Ooredoo 👋</Text>
         <Text style={styles.subtitle}>
-          Please fill in your information below. Your mobile number should start
-          with either 3, 5, 6, or 7.
+          {landlineControl
+            ? "Please fill in your information below. Your landline number must start with a 4."
+            : "Please fill in your information below. Your mobile number should start with either 3, 5, 6, or 7."}
         </Text>
         <View style={styles.inputContainer}>
-          {landline === null ? (
+          {landlineControl ? (
             <TextInput
               maxLength={8}
               onChangeText={(text) => setMobileNumber(text)}
               style={styles.input}
-              placeholder={"Mobile Number"}
+              placeholder={"Landline"}
             />
           ) : (
             <TextInput
               maxLength={8}
               onChangeText={(text) => setMobileNumber(text)}
               style={styles.input}
-              placeholder={"Landline"}
+              placeholder={"Mobile Number"}
             />
           )}
           {errorMobileNumber ? (

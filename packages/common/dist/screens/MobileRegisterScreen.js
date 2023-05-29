@@ -66,12 +66,14 @@ var react_1 = __importStar(require("react"));
 var react_native_1 = require("react-native");
 var Button_1 = __importDefault(require("../components/Button"));
 var validateQID_1 = require("../utils/validateQID");
+var validateMobileNumber_1 = require("../utils/validateMobileNumber");
 var colors_1 = require("../constans/colors");
 var MobileRegisterScreen = function (props) {
     var navigation = props.navigation;
     var _a = (0, react_1.useState)(""), mobileNumber = _a[0], setMobileNumber = _a[1];
     var _b = (0, react_1.useState)(""), qatarID = _b[0], setQatarID = _b[1];
     var _c = (0, react_1.useState)(""), errorQID = _c[0], setErrorQID = _c[1];
+    var _d = (0, react_1.useState)(""), errorMobileNumber = _d[0], setErrorMobileNumber = _d[1];
     (0, react_1.useEffect)(function () {
         if (qatarID && !(0, validateQID_1.validateQID)(qatarID)) {
             setErrorQID("Invalid Qatar ID");
@@ -80,56 +82,65 @@ var MobileRegisterScreen = function (props) {
             setErrorQID("");
         }
     }, [qatarID]);
-    // const handleSubmit = async () => {
-    //     try {
-    //       const formData = {
-    //         serviceNumber: mobileNumber,
-    //         qid: qatarID,
-    //       };
-    //       const response = await fetch("http://localhost:8080/validateServiceNumberForRegistration", {
-    //         method: "POST",
-    //         headers: {
-    //           "Content-Type": "application/json",
-    //         },
-    //         body: JSON.stringify(formData),
-    //       });
-    //       if (!response.ok) {
-    //         throw new Error("API request failed");
-    //       }
-    //       if (Platform.OS !== "web") {
-    //         navigation.navigate("Step Three");
-    //       } else {
-    //       }
-    //     } catch (error) {
-    //       console.error(error);
-    //     } finally {
-    //     }
-    // };
+    (0, react_1.useEffect)(function () {
+        if (mobileNumber && !(0, validateMobileNumber_1.validateMobileNumber)(mobileNumber)) {
+            setErrorMobileNumber("Invalid Mobile Nubmer");
+        }
+        else {
+            setErrorMobileNumber("");
+        }
+    }, [mobileNumber]);
     var handleSubmit = function () { return __awaiter(void 0, void 0, void 0, function () {
-        var data;
+        var data, response, url, responseData, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    if (!(0, validateQID_1.validateQID)(qatarID)) {
+                    if (!(0, validateMobileNumber_1.validateMobileNumber)(mobileNumber)) {
                         setErrorQID("Invalid Qatar ID");
+                        return [2 /*return*/];
+                    }
+                    if (!(0, validateQID_1.validateQID)(qatarID)) {
+                        setErrorMobileNumber("Invalid Mobile Nubmer");
                         return [2 /*return*/];
                     }
                     data = {
                         serviceNumber: mobileNumber,
                         qid: qatarID,
                     };
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 6, , 7]);
                     return [4 /*yield*/, fetch("http://localhost:8080/validateServiceNumberForRegistration", {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json",
                             },
                             body: JSON.stringify(data),
-                        })
-                            .then(function (res) { return res === null || res === void 0 ? void 0 : res.json(); })
-                            .catch(function (error) { return error; })];
-                case 1:
-                    _a.sent();
-                    return [2 /*return*/];
+                        })];
+                case 2:
+                    response = _a.sent();
+                    if (!response.ok) return [3 /*break*/, 3];
+                    url = "/verification?mobileNumber=".concat(mobileNumber);
+                    if (react_native_1.Platform.OS === "web") {
+                        window.location.href = url;
+                    }
+                    else {
+                        navigation.navigate("Verification", {
+                            serviceNumber: mobileNumber,
+                        });
+                    }
+                    return [3 /*break*/, 5];
+                case 3: return [4 /*yield*/, response.json()];
+                case 4:
+                    responseData = _a.sent();
+                    responseData.error;
+                    _a.label = 5;
+                case 5: return [3 /*break*/, 7];
+                case 6:
+                    error_1 = _a.sent();
+                    console.log("error", error_1);
+                    return [3 /*break*/, 7];
+                case 7: return [2 /*return*/];
             }
         });
     }); };
@@ -138,7 +149,8 @@ var MobileRegisterScreen = function (props) {
             react_1.default.createElement(react_native_1.Text, { style: styles.title }, "Welcome to Ooredoo \uD83D\uDC4B"),
             react_1.default.createElement(react_native_1.Text, { style: styles.subtitle }, "Please fill in your information below. Your mobile number should start with either 3, 5, 6, or 7."),
             react_1.default.createElement(react_native_1.View, { style: styles.inputContainer },
-                react_1.default.createElement(react_native_1.TextInput, { onChangeText: function (text) { return setMobileNumber(text); }, style: styles.input, placeholder: "Mobile Number" })),
+                react_1.default.createElement(react_native_1.TextInput, { onChangeText: function (text) { return setMobileNumber(text); }, style: styles.input, placeholder: "Mobile Number" }),
+                errorMobileNumber ? (react_1.default.createElement(react_native_1.Text, { style: styles.error }, errorMobileNumber)) : null),
             react_1.default.createElement(react_native_1.View, { style: styles.inputContainer },
                 react_1.default.createElement(react_native_1.TextInput, { onChangeText: function (text) { return setQatarID(text); }, style: styles.input, placeholder: "Qatar ID or Passport ID" }),
                 errorQID ? react_1.default.createElement(react_native_1.Text, { style: styles.error }, errorQID) : null)),

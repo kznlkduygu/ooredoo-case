@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, TextInput, StyleSheet, Platform } from "react-native";
 import Button from "../components/Button";
 import { validateQID } from "../utils/validateQID";
+import { validateMobileNumber } from "../utils/validateMobileNumber";
 import { Colors } from "../constans/colors";
 
 interface Props {
@@ -13,6 +14,7 @@ const MobileRegisterScreen = (props: Props) => {
   const [mobileNumber, setMobileNumber] = useState("");
   const [qatarID, setQatarID] = useState("");
   const [errorQID, setErrorQID] = useState("");
+  const [errorMobileNumber, setErrorMobileNumber] = useState("");
 
   useEffect(() => {
     if (qatarID && !validateQID(qatarID)) {
@@ -22,37 +24,22 @@ const MobileRegisterScreen = (props: Props) => {
     }
   }, [qatarID]);
 
-  // const handleSubmit = async () => {
-  //     try {
-  //       const formData = {
-  //         serviceNumber: mobileNumber,
-  //         qid: qatarID,
-  //       };
-
-  //       const response = await fetch("http://localhost:8080/validateServiceNumberForRegistration", {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify(formData),
-  //       });
-
-  //       if (!response.ok) {
-  //         throw new Error("API request failed");
-  //       }
-  //       if (Platform.OS !== "web") {
-  //         navigation.navigate("Step Three");
-  //       } else {
-  //       }
-  //     } catch (error) {
-  //       console.error(error);
-  //     } finally {
-  //     }
-  // };
+  useEffect(() => {
+    if (mobileNumber && !validateMobileNumber(mobileNumber)) {
+      setErrorMobileNumber("Invalid Mobile Nubmer");
+    } else {
+      setErrorMobileNumber("");
+    }
+  }, [mobileNumber]);
 
   const handleSubmit = async () => {
-    if (!validateQID(qatarID)) {
+    if (!validateMobileNumber(mobileNumber)) {
       setErrorQID("Invalid Qatar ID");
+      return;
+    }
+
+    if (!validateQID(qatarID)) {
+      setErrorMobileNumber("Invalid Mobile Nubmer");
       return;
     }
 
@@ -61,15 +48,34 @@ const MobileRegisterScreen = (props: Props) => {
       qid: qatarID,
     };
 
-    await fetch("http://localhost:8080/validateServiceNumberForRegistration", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((res) => res?.json())
-      .catch((error) => error);
+    try {
+      const response = await fetch(
+        "http://localhost:8080/validateServiceNumberForRegistration",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      if (response.ok) {
+        const url = `/verification?mobileNumber=${mobileNumber}`;
+        if (Platform.OS === "web") {
+          window.location.href = url;
+        } else {
+          navigation.navigate("Verification", {
+            serviceNumber: mobileNumber,
+          });
+        }
+      } else {
+        const responseData = await response.json();
+        responseData.error;
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
   };
 
   return (
@@ -86,6 +92,9 @@ const MobileRegisterScreen = (props: Props) => {
             style={styles.input}
             placeholder="Mobile Number"
           />
+          {errorMobileNumber ? (
+            <Text style={styles.error}>{errorMobileNumber}</Text>
+          ) : null}
         </View>
         <View style={styles.inputContainer}>
           <TextInput

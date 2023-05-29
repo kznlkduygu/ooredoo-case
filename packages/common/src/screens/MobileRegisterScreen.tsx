@@ -18,16 +18,18 @@ const MobileRegisterScreen = (props: Props) => {
   const [errorQID, setErrorQID] = useState("");
   const [errorMobileNumber, setErrorMobileNumber] = useState("");
 
-  let landline: any;
+  const [landline, setLandline] = useState<any>(false);
 
-  if (Platform.OS === "web") {
-    const params = new URLSearchParams(window.location.search);
-    landline = params.get("isLandline");
-  } else {
-    const route = useRoute();
-    const { isLandline } = route.params;
-    landline = isLandline;
-  }
+  useEffect(() => {
+    if (Platform.OS === "web") {
+      const params = new URLSearchParams(window.location.search);
+      setLandline(params.get("isLandline"));
+    } else {
+      const route = useRoute();
+      const { isLandline } = route.params;
+      setLandline(isLandline);
+    }
+  }, [landline]);
 
   useEffect(() => {
     if (qatarID && !validateQID(qatarID)) {
@@ -101,12 +103,21 @@ const MobileRegisterScreen = (props: Props) => {
           with either 3, 5, 6, or 7.
         </Text>
         <View style={styles.inputContainer}>
-          <TextInput
-            maxLength={8}
-            onChangeText={(text) => setMobileNumber(text)}
-            style={styles.input}
-            placeholder={landline ? "Landline" : "Mobile Number"}
-          />
+          {landline === null ? (
+            <TextInput
+              maxLength={8}
+              onChangeText={(text) => setMobileNumber(text)}
+              style={styles.input}
+              placeholder={"Mobile Number"}
+            />
+          ) : (
+            <TextInput
+              maxLength={8}
+              onChangeText={(text) => setMobileNumber(text)}
+              style={styles.input}
+              placeholder={"Landline"}
+            />
+          )}
           {errorMobileNumber ? (
             <Text style={styles.error}>{errorMobileNumber}</Text>
           ) : null}

@@ -14,12 +14,10 @@ var RegisterFirst = function (props) {
             react_1.default.createElement(react_native_1.Text, { style: styles.subtitle }, "Please select your registration type")),
         react_1.default.createElement(react_native_1.View, { style: styles.sectionContainer },
             react_1.default.createElement(react_native_1.TouchableOpacity, { onPress: function () {
-                    var url = "/mobileregister?isLandline=false";
+                    var url = "/mobileregister";
                     react_native_1.Platform.OS === "web"
                         ? (window.location.href = url)
-                        : navigation.navigate("MobileRegister", {
-                            isLogin: false,
-                        });
+                        : navigation.navigate("MobileRegister");
                 }, style: styles.buttonContainer },
                 react_1.default.createElement(react_native_1.Text, { style: styles.buttonText }, "Mobile Number")),
             react_1.default.createElement(react_native_1.TouchableOpacity, { onPress: function () {

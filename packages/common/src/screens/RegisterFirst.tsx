@@ -26,12 +26,10 @@ const RegisterFirst = (props: Props) => {
       <View style={styles.sectionContainer}>
         <TouchableOpacity
           onPress={() => {
-            const url = `/mobileregister?isLandline=false`;
+            const url = `/mobileregister`;
             Platform.OS === "web"
               ? (window.location.href = url)
-              : navigation.navigate("MobileRegister", {
-                  isLogin: false,
-                });
+              : navigation.navigate("MobileRegister");
           }}
           style={styles.buttonContainer}
         >

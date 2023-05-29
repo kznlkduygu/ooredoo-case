@@ -75,17 +75,18 @@ var MobileRegisterScreen = function (props) {
     var _b = (0, react_1.useState)(""), qatarID = _b[0], setQatarID = _b[1];
     var _c = (0, react_1.useState)(""), errorQID = _c[0], setErrorQID = _c[1];
     var _d = (0, react_1.useState)(""), errorMobileNumber = _d[0], setErrorMobileNumber = _d[1];
-    var landline;
-    if (react_native_1.Platform.OS === "web") {
-        var params = new URLSearchParams(window.location.search);
-        landline = params.get("isLandline");
-    }
-    else {
-        var route = useRoute();
-        var isLandline = route.params.isLandline;
-        landline = isLandline;
-    }
-    console.log("landline", landline);
+    var _e = (0, react_1.useState)(false), landline = _e[0], setLandline = _e[1];
+    (0, react_1.useEffect)(function () {
+        if (react_native_1.Platform.OS === "web") {
+            var params = new URLSearchParams(window.location.search);
+            setLandline(params.get("isLandline"));
+        }
+        else {
+            var route = useRoute();
+            var isLandline = route.params.isLandline;
+            setLandline(isLandline);
+        }
+    }, [landline]);
     (0, react_1.useEffect)(function () {
         if (qatarID && !(0, validateQID_1.validateQID)(qatarID)) {
             setErrorQID("Invalid Qatar ID");
@@ -163,7 +164,7 @@ var MobileRegisterScreen = function (props) {
             react_1.default.createElement(react_native_1.Text, { style: styles.title }, "Welcome to Ooredoo \uD83D\uDC4B"),
             react_1.default.createElement(react_native_1.Text, { style: styles.subtitle }, "Please fill in your information below. Your mobile number should start with either 3, 5, 6, or 7."),
             react_1.default.createElement(react_native_1.View, { style: styles.inputContainer },
-                react_1.default.createElement(react_native_1.TextInput, { maxLength: 8, onChangeText: function (text) { return setMobileNumber(text); }, style: styles.input, placeholder: landline ? "Landline" : "Mobile Number" }),
+                landline === null ? (react_1.default.createElement(react_native_1.TextInput, { maxLength: 8, onChangeText: function (text) { return setMobileNumber(text); }, style: styles.input, placeholder: "Mobile Number" })) : (react_1.default.createElement(react_native_1.TextInput, { maxLength: 8, onChangeText: function (text) { return setMobileNumber(text); }, style: styles.input, placeholder: "Landline" })),
                 errorMobileNumber ? (react_1.default.createElement(react_native_1.Text, { style: styles.error }, errorMobileNumber)) : null),
             react_1.default.createElement(react_native_1.View, { style: styles.inputContainer },
                 react_1.default.createElement(react_native_1.TextInput, { maxLength: 11, onChangeText: function (text) { return setQatarID(text); }, style: styles.input, placeholder: "Qatar ID or Passport ID" }),
